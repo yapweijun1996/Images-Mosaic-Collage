@@ -190,17 +190,11 @@ export const mountImgCollage = (
   options: ImgCollageOptions
 ) => {
   let state: ImgCollageOptions = { ...options };
-  let zIndexSeed = 1;
   const loadedRatios: Record<string, number> = {};
   const pendingLoads = new Set<string>();
   let destroyed = false;
 
   ensureBaseLayout(target, state.className);
-
-  const bringToFront = (wrapper: HTMLElement) => {
-    zIndexSeed += 1;
-    wrapper.style.zIndex = zIndexSeed.toString();
-  };
 
   const render = () => {
     const {
@@ -264,6 +258,7 @@ export const mountImgCollage = (
       const handlePointerUp = () => {
         if (!dragging) return;
         dragging = false;
+        wrapper.style.zIndex = '';
         wrapper.style.boxShadow = '';
         window.removeEventListener('pointermove', handlePointerMove);
         window.removeEventListener('pointerup', handlePointerUp);
@@ -280,6 +275,7 @@ export const mountImgCollage = (
         startY = event.clientY;
         initialLeft = parseFloat(wrapper.style.left) || 0;
         initialTop = parseFloat(wrapper.style.top) || 0;
+        wrapper.style.zIndex = '1000';
         wrapper.style.boxShadow = '0 8px 16px rgba(0, 0, 0, 0.3)';
         window.addEventListener('pointermove', handlePointerMove);
         window.addEventListener('pointerup', handlePointerUp);
@@ -382,10 +378,6 @@ export const mountImgCollage = (
       if (onImageClick) {
         wrapper.addEventListener('click', () => onImageClick(item.index));
       }
-      const handleBringToFront = () => bringToFront(wrapper);
-      wrapper.addEventListener('pointerdown', handleBringToFront, {
-        capture: true,
-      });
 
       const img = document.createElement('img');
       img.src = item.src;
