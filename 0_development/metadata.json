@@ -1,0 +1,5 @@
+{
+  "name": "React Mosaic Collage v1.1",
+  "description": "A responsive image collage component that automatically adjusts its internal layout based on the number of images provided (1 to 5+).",
+  "requestFramePermissions": []
+}
